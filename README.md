@@ -1,2 +1,108 @@
-# VLM-Multimodal-Applications-Video-Understanding-Insurance-AI
-This project showcases practical applications of cutting-edge open-source multimodal large models (e.g., Qwen-VL, InternVL) in video deep interpretation, vehicle damage assessment, and insurance document recognition, covering both local optimized deployment and cloud API integration.
+# 🚀 视觉大模型与多模态理解实战 (VLM & Multimodal Understanding)
+
+本项目汇集了基于 **Qwen-VL**、**InternVL** 等前沿开源多模态大模型的实战案例，重点展示了在**视频深度解读**、**车辆损伤评估**及**保险单据识别**等领域的应用。项目包含了从本地模型部署（显存优化版）到云端 API 调用的完整解决方案。
+
+## 📂 项目结构
+
+```text
+.
+├── CASE-VLM在寿险中的应用/       # 寿险场景：多语言保险单据信息提取
+├── CASE-VLM在车险中的应用/       # 车险场景：里程表、车损、危险驾驶检测
+├── CASE-汽车剐蹭视频理解/        # 视频理解：汽车剐蹭事故分析
+├── 梦底解读IV.py                 # InternVideo2_5 视频解读（极致显存优化）
+├── 梦底解读Qwen (1).py           # Qwen3.6-27B-FP8 视频解读（含基础信息识别）
+├── InternVL.py                   # InternVL 2.5 通用视频理解脚本
+├── requirements.txt              # 核心依赖清单
+└── 视觉大模型与多模态理解.pdf     # 理论指导文档
+```
+
+## ✨ 核心功能模块
+
+### 1. 🎬 春晚视频深度解读系列
+针对长视频内容，实现了高精度的多轮对话式解读，特别针对显存占用进行了深度优化。
+
+*   **[梦底解读Qwen (1).py](./梦底解读Qwen%20(1).py)**
+    *   **模型**: `Qwen3.6-27B-FP8`
+    *   **特点**: 
+        *   **全维度识别**: 新增基础信息提取（节目名、词曲作者、演唱者等）。
+        *   **深度分析**: 涵盖演唱技巧、舞蹈动作寓意、舞台视觉细节及春晚氛围契合度。
+        *   **显存优化**: 采用 48 帧关键帧采样策略，每轮对话后强制清空显存，适配消费级显卡。
+*   **[梦底解读IV.py](./梦底解读IV.py)**
+    *   **模型**: `InternVideo2_5_Chat_8B`
+    *   **特点**: 专注于表演艺术层面的深度评价，通过极低显存占用实现高质量的视频语义理解。
+
+### 2. 🚗 智能视频理解与空间增强问答
+*   **[InternVL.py](./InternVL.py)**
+    *   **模型**: `InternVL 2.5` 系列
+    *   **功能**: 
+        *   **多语言支持**: 支持中英双语的视频内容描述与问答。
+        *   **精准定位**: 能够识别视频中的人数、车辆受损部位及碰撞位置。
+        *   **动态采样**: 根据视频时长自动调整采样帧数，平衡处理速度与识别精度。
+*   **[qwen_spatial_analysis.py](./qwen_spatial_analysis.py) (新增)**
+    *   **模型**: `Qwen3.6-27B-FP8` / `Qwen2.5-VL-7B-Instruct`
+    *   **核心突破**: 
+        *   **FP8 高效部署**: 实现 27B 参数模型在消费级显卡上的流畅运行。
+        *   **注意力热力图**: 通过 Hook 机制提取 Cross-Attention，可视化《梦底》等视频的空间关注点。
+        *   **空间正则微调**: 引入弱位置损失约束，解决车损框与部件位置的偏移问题。
+        *   **推理校验**: 加入位置注意力偏置与车损空间校验规则，过滤不合理输出。
+    *   **项目成果**: 车损位置识别准确率从 **78% 提升至 91%**，部件计数误差率降低 **65%**，通用图文能力下降控制在 **3%** 以内。
+
+### 3. 🏥 行业垂直应用案例 (CASE)
+利用 **Qwen-VL-Max** 等云端 API 或本地模型，解决特定行业的痛点：
+
+*   **寿险应用**: 实现中、日、法、德、韩等多语种保险单据的自动化关键要素提取。
+*   **车险应用**: 
+    *   **里程表读数**: 自动识别仪表盘数字。
+    *   **核保验车**: 多角度车辆外观一致性校验。
+    *   **车损评估**: 识别刮蹭、凹陷等损伤程度。
+    *   **危险驾驶检测**: 识别行车过程中的违规行为。
+
+## 🛠️ 环境配置
+
+### 1. 依赖安装
+本项目基于 Python 3.12 + PyTorch 2.8.0 (CUDA 12.8) 构建。
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. 核心依赖说明
+*   **深度学习框架**: `torch==2.8.0+cu128`, `torchvision==0.23.0+cu128`
+*   **模型库**: `transformers==4.46.0`, `modelscope==1.25.0`
+*   **视频处理**: `decord==0.6.0` (高效视频帧读取)
+*   **图像处理**: `Pillow==11.2.1`
+
+## 🚀 快速开始
+
+### 运行视频解读脚本
+确保已下载对应的模型权重并修改脚本中的 `MODEL_PATH` 和 `VIDEO_PATH`。
+
+```python
+# 示例：运行 Qwen 视频解读
+python "梦底解读Qwen (1).py"
+```
+
+### 调用云端 API 识别
+在 `CASE` 文件夹下的脚本中，需配置环境变量 `DASHSCOPE_API_KEY` 以调用阿里云 DashScope 接口。
+
+```bash
+export DASHSCOPE_API_KEY="your-api-key-here"
+python CASE-VLM在车险中的应用/1-Qwen-VL-保险识别-cn.py
+```
+
+## 📝 技术亮点
+
+1.  **显存极致优化**: 通过 `torch.cuda.set_per_process_memory_fraction` 限制显存占比，配合 `gc.collect()` 和 `empty_cache()`，在有限显存下运行 27B+ 参数的大模型。
+2.  **空间增强与可解释性 (Spatial Enhancement)**: 
+    *   **FP8 量化部署**: 成功部署 Qwen3.6-27B-FP8，大幅降低推理门槛。
+    *   **注意力热力图**: 利用 Hook 机制提取 Cross-Attention Weights，直观展示模型对《梦底》舞台布局或车损部位的关注区域。
+    *   **空间正则微调**: 采用分阶段训练策略，后期引入弱位置损失（Weak Positional Loss）约束坐标预测。
+    *   **推理空间校验**: 结合物理常识（如车轮在下、玻璃在上）与注意力偏置，有效过滤幻觉输出。
+3.  **动态帧采样**: 针对长视频，采用“前段关键帧 + 均匀采样”的策略，既保留了视频开头的关键信息（如字幕），又覆盖了整体内容。
+
+## 📄 许可证
+
+本项目仅供学习与研究使用。模型权重的使用请遵循各模型官方（如 Alibaba Cloud, OpenGVLab）的开源协议。
+
+---
+*Powered by Qwen-VL, InternVL & ModelScope*

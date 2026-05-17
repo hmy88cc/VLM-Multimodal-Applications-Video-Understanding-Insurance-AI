@@ -1,0 +1,21 @@
+# 老师要求的核心包（版本不变）
+decord==0.6.0
+modelscope==1.25.0
+numpy==2.2.5
+Pillow==11.2.1
+
+# 适配CUDA 12.8 + PyTorch 2.8.0的核心框架
+torch==2.8.0+cu128
+torchvision==0.23.0+cu128
+
+# 适配Python 3.12 + torch 2.8.0的微调库
+transformers==4.46.0
+peft==0.12.0
+accelerate==0.33.0
+bitsandbytes==0.44.1
+datasets==2.21.0
+sentencepiece==0.1.99
+protobuf==4.25.3
+einops==0.8.0
+tqdm==4.66.1
+
